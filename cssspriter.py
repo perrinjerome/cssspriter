@@ -6,18 +6,18 @@ import urllib.request, urllib.parse, urllib.error
 import re
 import sys
 import os.path
-import optparse
+import argparse
 
 
 def main():
-  parser = optparse.OptionParser()
-  parser.add_option("-i", "--input", action="append", dest="input_css_list",
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-i", "--input", action="append", dest="input_css_list",
                     help="URL of the input css. Can be passed multiple times.")
-  parser.add_option("-o", "--css-output", action="store", dest="css_output",
+  parser.add_argument("-o", "--css-output", action="store", dest="css_output",
                     help="Path of the css output css")
-  parser.add_option("-O", "--image-output", action="store",
+  parser.add_argument("-O", "--image-output", action="store",
                     dest="image_output", help="Path of the image output")
-  (options, args) = parser.parse_args(sys.argv)
+  options = parser.parse_args()
 
   css_dict = dict()
   img_dict = dict()
