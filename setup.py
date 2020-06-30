@@ -7,7 +7,7 @@ setup(name='cssspriter',
       url='',
       license='GPL',
       author='Jérome Perrin',
-      install_requires=['PIL', 'cssutils'],
+      install_requires=['Pillow', 'cssutils'],
       entry_points=dict(console_scripts=
               'cssspriter=cssspriter:main'),
 )
