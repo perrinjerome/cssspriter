@@ -1,8 +1,8 @@
 import cssutils
 from PIL import Image
 
-from StringIO import StringIO
-import urllib
+from io import BytesIO
+import urllib.request, urllib.parse, urllib.error
 import re
 import sys
 import os.path
@@ -26,16 +26,16 @@ def main():
   # parse all css and gather all images
   for input_css in options.input_css_list:
     base = os.path.dirname(input_css)
-    css_content = urllib.urlopen(input_css).read()
+    css_content = urllib.request.urlopen(input_css).read()
 
     def read_image(url):
-      if urllib.splittype(url)[0] is None:
+      if urllib.parse.splittype(url)[0] is None:
         url = '%s/%s' % (base, url)
       # XXX handle 404
-      print "  downloading", url
-      return Image.open(StringIO(urllib.urlopen(url).read()))
+      print("  downloading", url)
+      return Image.open(BytesIO(urllib.request.urlopen(url).read()))
 
-    print "processing", input_css
+    print("processing", input_css)
     sheet = cssutils.parseString(css_content)
 
     extract_img_re = re.compile(r'url\([\'\"]*([^\'\"]*)[\'\"]*\)')
@@ -76,7 +76,7 @@ def main():
   new_css_text_list = []
   for sheet in sheet_list:
     # TODO: calculate the "images" part based on urls differences
-    full_img_url = u"url(images/%s)" % (os.path.basename(options.image_output))
+    full_img_url = "url(images/%s)" % (os.path.basename(options.image_output))
 
     for rule in sheet:
       if rule.type == rule.STYLE_RULE:
@@ -85,8 +85,8 @@ def main():
             if 'url' in prop.value:
               position = rule.style.getProperty('background-position', normalize=True)
               if position:# and position.value not in ('left', 'top left'):
-                print "WARNING ignoring complex background-position %s for %s" % (
-                  position.cssText, rule.cssText)
+                print("WARNING ignoring complex background-position %s for %s" % (
+                  position.cssText, rule.cssText))
                 continue
               img_url = extract_img_re.match(prop.value).groups()[0]
               if img_url == 'blank.gif':
@@ -98,7 +98,8 @@ def main():
               rule.style['height'] = "%(height)spx" % img_pos
     new_css_text_list.append(sheet.cssText)
 
-  open(options.css_output, "w").write("\n".join(new_css_text_list))
+  with open(options.css_output, "wb") as f:
+    for css_text in new_css_text_list:
+      f.write(css_text)
+
   big_image.save(options.image_output)
-
-
