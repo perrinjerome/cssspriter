@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='cssspriter',
       description='CSS Sprites generator',
       keywords='css sprite',
-      version='0.1',
+      version='0.2.0',
       url='',
       license='GPL',
       author='Jérome Perrin',
