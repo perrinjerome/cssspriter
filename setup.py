@@ -1,4 +1,5 @@
-from setuptools import setup
+
+from setuptools import setup, find_packages
 
 with open('./README.rst') as f:
   long_description = f.read()
@@ -6,10 +7,11 @@ with open('./README.rst') as f:
 setup(name='cssspriter',
       description='CSS Sprites generator',
       keywords='css sprite',
-      version='0.2.1',
+      version='0.2.2',
       url='https://github.com/perrinjerome/cssspriter',
       license='GPL',
       author='Jérome Perrin',
+      packages=find_packages(),
       install_requires=['Pillow', 'cssutils'],
       entry_points=dict(console_scripts=
               'cssspriter=cssspriter:main'),
